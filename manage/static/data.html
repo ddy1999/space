@@ -1,0 +1,1044 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <script src="https://cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.bootcss.com/echarts/4.1.0.rc2/echarts.min.js"></script>
+    <script type="text/javascript" src="../static/assets/lib/chengdu.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" language="javascript" src="https://cdn.bootcss.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
+    <script type="text/javascript" language="javascript" src="../static/assets/lib/jquery.marquee.js"></script>
+    <title>dataview</title>
+</head>
+<style>
+
+  /*隐藏滚动条*/
+  /*webkit内核*/
+  ::-webkit-scrollbar {
+    display:none
+  }
+  /*o内核*/
+  body::-o-scrollbar{
+    -moz-appearance: none !important;
+    background: rgba(0,255,0,0) !important;
+  }
+  body::-o-scrollbar-button    {
+    background-color:rgba(0,0,0,0);
+  }
+  body::-o-scrollbar-track     {
+    background-color:rgba(0,0,0,0);
+  }
+  body::-o-scrollbar-track-piece {
+    background-color:rgba(0,0,0,0);
+  }
+  body::-o-scrollbar-thumb{
+    background-color:rgba(0,0,0,0);
+  }
+  body::-o-scrollbar-corner {
+    background-color:rgba(0,0,0,0);
+  }
+  body::-o-scrollbar-resizer  {
+    background-color:rgba(0,0,0,0);
+  }
+  /*IE10,IE11,IE12*/
+  .scroll_content,body{
+    -ms-scroll-chaining: chained;
+    -ms-overflow-style: none;
+    -ms-content-zooming: zoom;
+    -ms-scroll-rails: none;
+    -ms-content-zoom-limit-min: 100%;
+    -ms-content-zoom-limit-max: 500%;
+    -ms-scroll-snap-type: proximity;
+    -ms-scroll-snap-points-x: snapList(100%, 200%, 300%, 400%, 500%);
+    -ms-overflow-style: none;
+    overflow: auto;
+  }
+  *{
+    margin:0;
+    padding:0;
+  }
+  #all{
+    width: 100%;
+    height:auto;
+    min-height:620px;
+    background:url('../static/img/all.jpg');
+    background-size: 100%;
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+  }
+  .scale{
+    position: absolute;
+    display: block;
+    width: 30px;
+    height: 30px;
+    top:0px;
+    right:0px;
+    cursor: pointer;
+  }
+  #left{
+    width:30%;
+    margin-right: 1%;
+
+  }
+  #center{
+    width: 38%;
+  }
+  #right{
+    width: 30%;
+    margin-left: 1%;
+  }
+  #sym,#date{
+    height:5%;
+    margin-bottom:1%;
+   /* background: #0572d1;*/
+    display:table;
+    width: 100%;
+    color:#fff;
+  }
+  #sym span,#pernum span,#title span,#brach span,#time{
+    vertical-align:middle;
+    display:table-cell;
+  }
+  #edu,#age,#action,#pay,#company,#lesson{
+    height: 29%;
+    width: 100%;
+    margin-bottom: 1%;
+   /* background: #0572d1;*/
+  }
+  #pernum,#brach{
+    height:5%;
+   /* background: #0572d1;*/
+    display: table;
+    width: 100%;
+    color:#fff;
+  }
+  #title{
+    height: 10%;
+    margin-bottom: 1%;
+  /*  background: #0572d1;*/
+    display: table;
+    width: 100%;
+    text-align: center;
+    font-size: 40px;
+    color:#fff;
+  }
+  #welcome{
+    height:5%;
+    margin-bottom:1%;
+    color:#ccc;
+   /* background: #0572d1;*/
+  }
+  #map{
+    height: 55%;
+    margin-bottom: 1%;
+   /* background: #0572d1;*/
+  }
+  #birth{
+    height: 4%;
+    margin-bottom: 1%;
+   /* background: #0572d1;*/
+  }
+  #code{
+    height: 23%;
+    /*background: #0572d1;*/
+  }
+  ul.marquee {
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+    height: 100%;
+  }
+  ul.marquee li {
+    position: absolute;
+    top: -999em;
+    left: 0;
+    display: block;
+    white-space: nowrap;
+    padding: 3px 5px;
+    text-indent:0.8em;
+    cursor: pointer;
+  }
+  #exciped{
+    text-align:center;
+    color:#fff;
+    width:100%!important;
+  }
+</style>
+<body>
+    <div id="all">
+      <img class="scale" src="img/scale.png" alt="">
+        <div id="left">
+            <div id="sym">
+             <span>系统运维情况:正常</span>
+            </div>
+            <div id="edu" ></div>
+            <div id="age" >
+            </div>
+            <div id="action"></div>
+            <div id="pernum">
+              <span id="pnum"></span>
+            </div>
+          </div>
+        <div id="center">
+            <div id="title">
+              <span>智慧党建云平台</span>
+            </div>
+            <div id="welcome">
+              <marquee direction="left" behavior="scroll" scrollamount="10" scrolldelay="0" loop="-1" width="100%" height="100%"  hspace="10" vspace="10">
+                  欢迎经开区领导！
+              </marquee>
+            </div>
+            <div id="map"></div>
+            <div id="birth">
+               <ul id="marquee" class="marquee">
+                 <li>123456</li>
+                 <li>1123</li>
+                 <li>123</li>
+                 <li>123</li>
+               </ul>
+            </div>
+            <div id="code">
+              <table id="exciped">
+                <thead>
+                <tr>
+                  <th>排名</th>
+                  <th>支部</th>
+                  <th>完成率</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>四川中财管道有限公司党支部</td>
+                  <td>100%</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>成都天邦生物制品有限公司党支部</td>
+                  <td>100%</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>成都亨通光通信有限公司党支部</td>
+                  <td>100%</td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td>成都宝湾国际物流有限公司党支部</td>
+                  <td>100%</td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td>成都实德塑胶工业有限公司党支部</td>
+                  <td>100%</td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td>成都棒棒娃实业有限公司党支部</td>
+                  <td>100%</td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td>成都鑫昌印章有限公司党支部</td>
+                  <td>100%</td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td>成都炭素有限责任公司党委</td>
+                  <td>100%</td>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+        </div>
+        <div id="right">
+            <div id="date">
+              <span id="time"></span>
+            </div>
+            <div id="pay" ></div>
+            <div id="company"></div>
+            <div id="lesson"></div>
+            <div id="brach">
+              <span id="iner"></span>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+<script>
+  //走马灯
+  $(function(){
+    $("#marquee").marquee({
+      yScroll: "top",
+      showSpeed: 500,        // 初始下拉速度         ,
+      scrollSpeed: 10,       // 滚动速度         ,
+      pauseSpeed: 1500,      // 滚动完到下一条的间隔时间         ,
+      pauseOnHover: true,    // 鼠标滑向文字时是否停止滚动         ,
+      loop: -1 ,             // 设置循环滚动次数 （-1为无限循环）         ,
+      fxEasingShow: "swing" , // 缓冲效果         ,
+      fxEasingScroll: "linear",  // 缓冲效果         ,
+      cssShowing: "marquee-showing"  //定义class
+    });
+    $("#marquee1").marquee();
+  });
+
+  //table
+  $(document).ready(function(){
+    /*$.get('${pageContext.request.contextPath}/data/userLiveness', function(data){
+      $("#exciped").bootstrapTable({
+        columns: [{
+          field: '',
+          title: '排名',
+          formatter: function (value, row, index) {
+            return index+1;
+          }
+        }, {
+          field: 'realname',
+          title: '个人排名'
+        }, {
+          field: 'liveness',
+          title: '积分排名'
+        }, {
+          field: 'org_id',
+          title: '支部排名'
+        }],
+        data: formatData(data)
+      });
+    })
+    // 格式化数据
+    var formatData = function (data) {
+      var l = [];
+      for (var i = 0; i < data.list.length; i++) {
+        var m = data.list[i]
+        var d = {
+          'realname': m.realname,
+          'liveness': m.liveness,
+          'org_id':m.org_id
+        }
+        l.push(d)
+      }
+      return l
+    };*/
+    $('#exciped').dataTable({
+      "fnInitComplete": function() {
+        this.fnAdjustColumnSizing(false);
+      },
+      "scrollY": "150px",
+      "scrollCollapse": true,
+      "paging": false,
+      "info": false,
+      "searching":false,
+      "ordering": false,
+      "autoWidth":true,
+    });
+    $("tr:even").css("background-color", "rgba(55,185,250,0)");
+    $("tr:odd").css("background-color", "rgba(17,188,255,0)");
+    $('th').css('color','#fff');
+    $('.sorting_disabled').css('border',"none");
+    $('.display').css('border-color',"#transparent");
+    $('table.dataTable.no-footer').css('border-color',"transparent");
+    $('.dataTables_wrapper.no-footer .dataTables_scrollBody').css('border-color',"transparent");
+    $('.dataTables_scrollHeadInner').css('width','100%');
+    $('.dataTables_scrollHeadInner').css('text-align','center');
+    $('thead').css('width','100%');
+  });
+
+
+
+
+
+
+
+
+  //让div的高度自适应
+  autodivheight();
+  function autodivheight(){ //函数：获取尺寸
+    //获取浏览器窗口高度
+    var winHeight=0;
+    if (window.innerHeight)
+      winHeight = window.innerHeight;
+    else if ((document.body) && (document.body.clientHeight))
+      winHeight = document.body.clientHeight;
+    //通过深入Document内部对body进行检测，获取浏览器窗口高度
+    if (document.documentElement && document.documentElement.clientHeight)
+      winHeight = document.documentElement.clientHeight;
+    //DIV高度为浏览器窗口的高度
+    document.getElementById("all").style.height= winHeight +"px";
+  }
+
+
+  //点击全屏
+    $('.scale').on('click',function (){
+      /* 获取父类的document */
+      let parentDoc = parent.document;
+      /* 定义一个接收元素的变量 */
+      let thisIframe = null;
+      /* 用jQuery遍历父类的所有iframe,找到我引入的那个iframe,
+           假设我不知道是哪个页面要引入我的iframe,但是引入我的iframe的src肯定会有引入这个页面的名字,
+           所以通过这个去检索,一定能找到引入这个页面的iframe,然后把这个iframe的元素全屏化也就是把原来的页面全屏化 */
+      $("iframe",window.parent.document).each(function(index,e){
+        if (e.src.indexOf("static/data") > 0) {
+          thisIframe = e;
+          return false;
+        }
+      });
+      requestFullScreen(thisIframe);
+    });
+  let requestFullScreen = function(element) {
+    let requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    if (requestMethod) {
+      requestMethod.call(element);
+    } else if (typeof window.ActiveXObject !== "undefined") {
+      var wscript = new ActiveXObject("WScript.Shell");
+      if (wscript !== null) {
+        wscript.SendKeys("{F11}");
+      }
+    }
+  }
+
+  //echart 绘制图标
+  //学历
+  let edu =echarts.init(document.getElementById('edu'));
+  $.ajax({
+    url: "/api/ds/edu",
+    data:'',
+    type: "post",
+    dataType: "json",
+    success: function (data){
+      var val= new Array();
+      var xiaoxue=[];
+      var middle=[];
+      var hight=[];
+      var permiddel=[];
+      var unvercity=[];
+      var highest=[];
+      var other=[];
+      for(var i=0;i<data.length;i++){
+        if(data[i].education=="8 小学"){
+          xiaoxue.push(data[i].num);
+        }else if(data[i].education=="7 初中"){
+          middle.push(data[i].num);
+        }else if(data[i].education=="6 普通高中"){
+          hight.push(data[i].num);
+        }else if(data[i].education=="41 中等专科"){
+          permiddel.push(data[i].num);
+        }else if(data[i].education=="44 中等专科"){
+          permiddel.push(data[i].num);
+        }else if(data[i].education=="47 技工学校"){
+          permiddel.push(data[i].num);
+        }else if(data[i].education=="21 大学"){
+          unvercity.push(data[i].num);
+        }else if(data[i].education=="22 大专"){
+          unvercity.push(data[i].num);
+        }else if(data[i].education=="23 普通大学班"){
+          unvercity.push(data[i].num);
+        }else if(data[i].education=="24 第二学士学位班"){
+          unvercity.push(data[i].num);
+        }else if(data[i].education=="2A 中央党校大学"){
+          unvercity.push(data[i].num);
+        }else if(data[i].education=="2B 省（区、市）委党校大学"){
+          unvercity.push(data[i].num);
+        }else if(data[i].education=="2C 中央党校大专"){
+          unvercity.push(data[i].num);
+        }else if(data[i].education=="2D 省（区、市）委党校大专"){
+          unvercity.push(data[i].num);
+        }else if(data[i].education=="11 博士研究生"){
+          highest.push(data[i].num);
+        }else if(data[i].education=="12 硕士研究生"){
+          highest.push(data[i].num);
+        }else if(data[i].education=="13 硕士生班"){
+          highest.push(data[i].num);
+        }else if(data[i].education=="1A 中央党校研究生"){
+          highest.push(data[i].num);
+        }else if(data[i].education=="2B 省（区、市）委党校研究生") {
+          highest.push(data[i].num);
+        }else if(data[i].education=="其他") {
+          other.push(data[i].num);
+        }
+      }
+      (function(){
+        var sum = 0;
+        var sum1 =0;
+        var sum2=0;
+        var sum3=0;
+        var sum4=0;
+        var sum5=0;
+        var sum6=0;
+        function getSum(item, index, array) {
+          sum += item;
+        };
+        function getSum1(item, index, array) {
+          sum1 += item;
+        };
+        function getSum2(item, index, array) {
+          sum2 += item;
+        };
+        function getSum3(item, index, array) {
+          sum3 += item;
+        };
+        function getSum4(item, index, array) {
+          sum4 += item;
+        };
+        function getSum5(item, index, array) {
+          sum5 += item;
+        };
+        function getSum6(item, index, array) {
+          sum6 += item;
+        };
+        xiaoxue.forEach(getSum);
+        middle.forEach(getSum1);
+        hight.forEach(getSum2);
+        permiddel.forEach(getSum3);
+        unvercity.forEach(getSum4);
+        highest.forEach(getSum5);
+        other.forEach(getSum6);
+        val.push(sum);
+        val.push(sum1);
+        val.push(sum2);
+        val.push(sum3);
+        val.push(sum4);
+        val.push(sum5);
+        val.push(sum6);
+      })();
+
+      edu.setOption({
+        title: {
+          text: '学历分布',
+          textStyle: {
+            color: '#ccc'
+          }
+        },
+        tooltip : {
+          trigger: 'axis',
+          axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+          },
+
+        },
+        xAxis: {
+          type: 'category',
+          splitLine:{show: false},
+          data: ['小学', '初中', '普高', '中职', '大学', '研究生','其他'],
+          axisLine:{
+            lineStyle:{
+              color: '#ccc'
+            }
+          }
+        },
+        yAxis: {
+          type: 'value',
+          splitLine:{show: false},
+          axisLine:{
+            lineStyle:{
+              color: '#ccc'
+            }
+          }
+        },
+        series: [{
+          type: 'bar',
+          barWidth:20,
+          itemStyle:{
+            normal:{
+              color:'#638af9'
+            }
+          },
+          data:val,
+        }]
+      });
+    }
+  });
+  //年龄
+  let age = echarts.init(document.getElementById('age'));
+  $.ajax({
+    url: "/api/ds/mt",
+    data:'',
+    type: "post",
+    dataType: "json",
+    success: function (data){
+    }
+  });
+  age.setOption({
+    title: {
+      text: '年龄分布',
+      textStyle: {
+        color: '#ccc'
+      }
+
+    },
+    tooltip: {
+      trigger: 'axis',
+      axisPointer: {            // 坐标轴指示器，坐标轴触发有效
+        type: 'line'        // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    xAxis: {
+      type: 'category',
+      splitLine: {show: false},
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      axisLine:{
+        lineStyle:{
+          color: '#ccc'
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      splitLine: {show: false},
+      axisLine:{
+        lineStyle:{
+          color: '#ccc'
+        }
+      }
+    },
+    series: [{
+      type: 'line',
+      itemStyle: {
+        normal: {
+          color: '#638af9'
+        }
+      },
+      data: [120, 200, 150, 80, 70, 110, 130],
+    }]
+  });
+  //三会一课
+  let lesson = echarts.init(document.getElementById('lesson'));
+    lesson.setOption({
+      title: {
+        text: '三会一课',
+        left: 'center',
+        top: 0,
+        textStyle: {
+          color: '#ccc'
+        }
+      },
+
+      tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+      },
+
+      visualMap: {
+        show: false,
+        min: 80,
+        max: 600,
+        inRange: {
+          colorLightness: [0, 1]
+        }
+      },
+      series : [
+        {
+          name:'访问来源',
+          type:'pie',
+          radius : '55%',
+          center: ['50%', '50%'],
+          data:[
+            {value:335, name:'直接访问'},
+            {value:310, name:'邮件营销'},
+            {value:274, name:'联盟广告'},
+            {value:235, name:'视频广告'},
+            {value:400, name:'搜索引擎'}
+          ].sort(function (a, b) { return a.value - b.value; }),
+          roseType: 'radius',
+          label: {
+            normal: {
+              textStyle: {
+                color: 'rgba(255, 255, 255, 0.3)'
+              }
+            }
+          },
+          labelLine: {
+            normal: {
+              lineStyle: {
+                color: 'rgba(255, 255, 255, 0.3)'
+              },
+              smooth: 0.2,
+              length: 10,
+              length2: 20
+            }
+          },
+          itemStyle: {
+            normal: {
+              color: '#c23531',
+              shadowBlur: 200,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+          },
+
+          animationType: 'scale',
+          animationEasing: 'elasticOut',
+          animationDelay: function (idx) {
+            return Math.random() * 200;
+          }
+        }
+      ]
+    })
+  //企业类型
+  let company = echarts.init(document.getElementById('company'));
+  company.setOption({
+    title: {
+      text: '企业类型',
+      left: 'center',
+      top: 0,
+      textStyle: {
+        color: '#ccc'
+      }
+    },
+
+    tooltip : {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+
+    visualMap: {
+      show: false,
+      min: 80,
+      max: 600,
+      inRange: {
+        colorLightness: [0, 1]
+      }
+    },
+    series : [
+      {
+        name:'访问来源',
+        type:'pie',
+        radius : '55%',
+        center: ['50%', '50%'],
+        data:[
+          {value:335, name:'直接访问'},
+          {value:310, name:'邮件营销'},
+          {value:274, name:'联盟广告'},
+          {value:235, name:'视频广告'},
+          {value:400, name:'搜索引擎'}
+        ].sort(function (a, b) { return a.value - b.value; }),
+        roseType: 'radius',
+        label: {
+          normal: {
+            textStyle: {
+              color: 'rgba(255, 255, 255, 0.3)'
+            }
+          }
+        },
+        labelLine: {
+          normal: {
+            lineStyle: {
+              color: 'rgba(255, 255, 255, 0.3)'
+            },
+            smooth: 0.2,
+            length: 10,
+            length2: 20
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: '#c23531',
+            shadowBlur: 200,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+
+        animationType: 'scale',
+        animationEasing: 'elasticOut',
+        animationDelay: function (idx) {
+          return Math.random() * 200;
+        }
+      }
+    ]
+  })
+  //党费缴纳
+  let pay = echarts.init(document.getElementById('pay'));
+  pay.setOption({
+    title: {
+      text: '党费缴纳',
+      left: 'center',
+      top: 0,
+      textStyle: {
+        color: '#ccc'
+      }
+    },
+
+    tooltip : {
+      trigger: 'item',
+      formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+
+    visualMap: {
+      show: false,
+      min: 80,
+      max: 600,
+      inRange: {
+        colorLightness: [0, 1]
+      }
+    },
+    series : [
+      {
+        name:'访问来源',
+        type:'pie',
+        radius : '55%',
+        center: ['50%', '50%'],
+        data:[
+          {value:335, name:'直接访问'},
+          {value:310, name:'邮件营销'},
+          {value:274, name:'联盟广告'},
+          {value:235, name:'视频广告'},
+          {value:400, name:'搜索引擎'}
+        ].sort(function (a, b) { return a.value - b.value; }),
+        roseType: 'radius',
+        label: {
+          normal: {
+            textStyle: {
+              color: 'rgba(255, 255, 255, 0.3)'
+            }
+          }
+        },
+        labelLine: {
+          normal: {
+            lineStyle: {
+              color: 'rgba(255, 255, 255, 0.3)'
+            },
+            smooth: 0.2,
+            length: 10,
+            length2: 20
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: '#c23531',
+            shadowBlur: 200,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        },
+
+        animationType: 'scale',
+        animationEasing: 'elasticOut',
+        animationDelay: function (idx) {
+          return Math.random() * 200;
+        }
+      }
+    ]
+  })
+  //主题活动
+  let action = echarts.init(document.getElementById('action'));
+  action.setOption({
+    title: {
+      text: '主题活动',
+      textStyle: {
+        color: '#ccc'
+      }
+    },
+    tooltip : {
+      trigger: 'axis',
+      axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+        type : 'line'        // 默认为直线，可选为：'line' | 'shadow'
+      }
+    },
+    xAxis: {
+      type: 'category',
+      splitLine:{show: false},
+      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+      axisLine:{
+        lineStyle:{
+          color: '#ccc'
+        }
+      }
+    },
+    yAxis: {
+      type: 'value',
+      splitLine:{show: false},
+      axisLine:{
+        lineStyle:{
+          color: '#ccc'
+        }
+      }
+    },
+    series: [{
+      type: 'bar',
+      barWidth:20,
+      itemStyle:{
+        normal:{
+          color:'#638af9'
+        }
+      },
+      data: [120, 200, 150, 80, 70, 110, 130],
+    }]
+  });
+  //地图
+  let map = echarts.init(document.getElementById('map'));
+  let data=[
+    {name:'经开区',value:'600'},
+  ];
+  let geoCoordMap = {
+    '经开区':[104.3360,30.700],
+  };
+  let convertData = function (data) {
+    let res = [];
+    for (let i = 0; i < data.length; i++) {
+      let geoCoord = geoCoordMap[data[i].name];
+      if (geoCoord) {
+        res.push({
+          name: data[i].name,
+          value: geoCoord.concat(data[i].value)
+        });
+      }
+    }
+    return res;
+  };
+  map.setOption({
+    backgroundColor: 'transparent',
+    title: {
+      text: '',
+      left: 'center',
+      textStyle: {
+        color: '#ADD8E6'
+      }
+    },
+    tooltip : {
+      trigger: 'item'
+    },
+    geo: {
+      map: '成都',
+      label: {
+        emphasis: {
+          show: false
+          //color: '#fff'
+        }
+      },
+      roam: false,
+      itemStyle: {
+        normal: {
+          areaColor: 'rgba(53,96,155,0.7)',
+          borderColor: '#111'
+        },
+        emphasis: {
+          areaColor: '#24417b'
+        }
+      }
+    },
+    series : [
+      {
+        name: '位置',
+        type: 'scatter',
+        coordinateSystem: 'geo',
+        data: convertData(data),
+        symbolSize: function (val) {
+          return val[2] / 20;
+        },
+        label: {
+          normal: {
+            formatter: '{b}',
+            position: 'right',
+            show: false
+          },
+          emphasis: {
+            show: true
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: '#ddb926',
+
+          }
+        }
+      },
+      {
+        name: 'Top 1',
+        type: 'effectScatter',
+        coordinateSystem: 'geo',
+        data: convertData(data.sort(function (a, b) {
+          return b.value - a.value;
+        }).slice(0, 6)),
+        symbolSize: function (val) {
+          return val[2] / 20;
+        },
+        showEffectOn: 'render',
+        rippleEffect: {
+          brushType: 'stroke'
+        },
+        hoverAnimation: true,
+        label: {
+          normal: {
+            formatter: '{b}',
+            position: 'right',
+            show: true
+          }
+        },
+        itemStyle: {
+          normal: {
+            color: '#f4e925',
+            shadowBlur: 10,
+            shadowColor: '#333'
+          }
+        },
+        zlevel: 1
+      }
+    ]
+  });
+
+  //窗口改变自适应
+  window.onresize=function(){
+    autodivheight();
+    edu.resize();
+    age.resize();
+    lesson.resize();
+    company.resize();
+    pay.resize();
+    action.resize();
+    map.resize();
+  }
+  //显示当前时间
+  window.onload=function(){
+    //定时器每秒调用一次fnDate()
+    setInterval(function(){
+      fnDate();
+    },1000);
+  };
+  function fnDate(){
+    let oDiv= document.getElementById("time");
+    let date= new Date();
+    let year=date.getFullYear();//当前年份
+    let month=date.getMonth();//当前月份
+    let data=date.getDate();//天
+    let hours=date.getHours();//小时
+    let minute=date.getMinutes();//分
+    let second=date.getSeconds();//秒
+    let time=year+"-"+fnW((month+1))+"-"+fnW(data)+" "+fnW(hours)+":"+fnW(minute)+":"+fnW(second);
+    oDiv.innerHTML = time;
+  };
+  //补位 当某个字段不是两位数时补0
+  function fnW(str){
+    let num;
+    str>10?num=str:num="0"+str;
+    return num;
+  };
+
+
+  //党支部数量
+  $.ajax({
+    url: "/api/ds/orgNum",
+    data:'',
+    type: "post",
+    dataType: "json",
+    success: function (data) {
+     let orgNum = document.getElementById("iner");
+     let iner="党支部数量:"+data.num;
+      orgNum.innerHTML=iner;
+    }
+    })
+//党员数量
+  $.ajax({
+    url: "/api/ds/ptmb",
+    data:'',
+    type: "post",
+    dataType: "json",
+    success: function (data) {
+      console.log(data);
+    let pNum = document.getElementById("pnum");
+      let iner="党员数量:"+data.num;
+      pNum.innerHTML=iner;
+    }
+  })
+
+</script>
